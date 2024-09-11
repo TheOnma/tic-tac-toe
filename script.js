@@ -119,7 +119,10 @@ const DisplayController = (() => {
   const player2Input = document.getElementById("player2-name");
   const gameStatus = document.getElementById("game-status");
 
-  //
+  // DOM elements for displaying scores
+  const player1Score = document.getElementById("player1-score");
+  const player2Score = document.getElementById("player2-score");
+  const tieScore = document.getElementById("tie-score");
 
   const renderBoard = () => {
     gameboardDiv.innerHTML = ""; // Clear the current board on the screen
@@ -132,12 +135,20 @@ const DisplayController = (() => {
       });
   };
 
+  const updateScores = () => {
+    const scores = GameController.getScores();
+    player1Score.textContent = `Player 1 Wins: ${scores.player1Wins}`;
+    player2Score.textContent = `Player 2 Wins: ${scores.player2Wins}`;
+    tieScore.textContent = `Ties: ${scores.ties}`;
+  };
+
   const handleCellClick = (index) => {
     const result = GameController.playRound(index);  // Play the round
         if (result) {
             gameStatus.textContent = result;  // Display the result (who won or if it's a tie)
             gameStatus.classList.remove("hidden");
             restartButton.classList.remove("hidden");
+            updateScores();
         }
         renderBoard();  // Re-render the board after the move
     };
@@ -150,6 +161,7 @@ const DisplayController = (() => {
       gameStatus.classList.add("hidden");
       restartButton.classList.add("hidden");
       renderBoard();
+      updateScores();
     };
 
     startButton.addEventListener("click", startGame);
