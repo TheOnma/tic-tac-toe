@@ -64,7 +64,7 @@ const GameController = (() => {
     }
 
     if(!board.includes("")){
-      return "Tie"; // If no winning condition is met and the board is full
+      return "tie"; // If no winning condition is met and the board is full
     }
 
     return null; // No winner yet
