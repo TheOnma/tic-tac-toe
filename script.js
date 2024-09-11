@@ -30,6 +30,11 @@ const GameController = (() => {
   let currentPlayerIndex = 0; // Tracks whose turn it is
   let gameOver = false; // Flag to indicate if the game is over
 
+  // Add counters for wins and draws
+  let player1Wins = 0;
+  let player2Wins = 0;
+  let ties = 0;
+
   const addPlayers = (player1Name, player2Name) => {
     players.push(Player(player1Name, "X")); 
     players.push(Player(player2Name, "O")); 
@@ -73,7 +78,17 @@ const GameController = (() => {
       const winner = checkWinner(); // Check if there's a winner
       if(winner) {
         gameOver = true; // End the game if there's a winner or tie
-        return winner === "tie" ? "It's a tie!" : `${currentPlayer.name} wins!`;
+        if(winner === "tie"){
+          ties++;
+          return "It's a tie!";
+        } else {
+          if (currentPlayerIndex === 0){
+            player1Wins++;
+          } else {
+            player2Wins++;
+          }
+          return `${currentPlayer.name} wins!`;
+        }
       } else {
         switchPlayer(); 
       }
@@ -87,7 +102,13 @@ const GameController = (() => {
     gameOver = false; // Reset game over flag
   };
 
-  return { addPlayers, playRound, resetGame, getCurrentPlayer };  // Return the functions we need to control the game
+  const getScores = () => ({
+    player1Wins,
+    player2Wins,
+    ties
+  });
+
+  return { addPlayers, playRound, resetGame, getCurrentPlayer, getScores };  // Return the functions we need to control the game
 })();
 
 const DisplayController = (() => {
@@ -97,6 +118,8 @@ const DisplayController = (() => {
   const player1Input = document.getElementById("player1-name");
   const player2Input = document.getElementById("player2-name");
   const gameStatus = document.getElementById("game-status");
+
+  //
 
   const renderBoard = () => {
     gameboardDiv.innerHTML = ""; // Clear the current board on the screen
