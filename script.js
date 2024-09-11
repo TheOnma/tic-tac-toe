@@ -173,6 +173,8 @@ const DisplayController = (() => {
         restartButton.classList.add("hidden");
     });
 
+    renderBoard();
+
     return { renderBoard };
 })();
 
